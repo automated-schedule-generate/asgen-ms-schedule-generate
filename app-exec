@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#criei esse carinha pra executar comandos dentro do container
+
+#para executar é só rodar: ./app-exec.sh <comando desejado>
+#exemplo> ./app-exec.sh yarn format
+
+docker compose exec app "$@"

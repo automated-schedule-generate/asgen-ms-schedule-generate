@@ -1,0 +1,67 @@
+{
+  "name": "timetable-generator",
+  "version": "1.0.0",
+  "homepage": "https://github.com/Guilhermevalenca/automated-scheduling-system#readme",
+  "bugs": {
+    "url": "https://github.com/Guilhermevalenca/automated-scheduling-system/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Guilhermevalenca/automated-scheduling-system.git"
+  },
+  "license": "ISC",
+  "contributors": [
+    {
+      "name": "Guilherme Valença",
+      "email": "gvrp@discente.ifpe.edu.br",
+      "url": "https://github.com/Guilhermevalenca"
+    },
+    {
+      "name": "Claudiane Rodrigues",
+      "email": "cra@discente.ifpe.edu.br",
+      "url": "https://github.com/RodriguesClaudiane"
+    },
+    {
+      "name": "Weydson Lino",
+      "email": "wls10@discente.ifpe.edu.br",
+      "url": "https://github.com/weydsonlino"
+    },
+    {
+      "name": "Joana Gomes",
+      "email": "jgn@discente.ifpe.edu.br",
+      "url": "https://github.com/JoanaG0mes"
+    }
+  ],
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "ts-node -r tsconfig-paths/register src/main.ts",
+    "dev:watch": "nodemon",
+    "build": "tsc && tsc-alias && npm run minify",
+    "minify": "sh -c 'mkdir -p dist-min && find dist -type f -name \"*.js\" ! -name \"*.min.js\" | while read file; do dest=\"dist-min/${file#dist/}\"; mkdir -p \"$(dirname \"$dest\")\"; terser \"$file\" -c -m -o \"${dest%.js}.js\"; done'",
+    "start": "node dist/main.js",
+    "start:prod": "node --max-old-space-size=6144 dist-min/main.js",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.3",
+    "nodemon": "^3.1.10",
+    "prettier": "3.6.2",
+    "terser": "^5.43.1",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "flatted": "^3.3.3",
+    "socket.io": "^4.8.1",
+    "zod": "^3.25.70"
+  }
+}
