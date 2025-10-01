@@ -3,6 +3,7 @@ import { CourseEntity, ScheduleEntity } from '../entities';
 import { ScoreService, MutationService, CrossoverService, NaturalSelectionService } from './';
 import { IGenetic } from '../interfaces';
 import process from 'node:process';
+import config from 'src/configuration/config';
 
 @Injectable()
 export class GeneticService implements IGenetic<void> {
@@ -11,7 +12,7 @@ export class GeneticService implements IGenetic<void> {
   // quantidade maxima de execuções do algoritmo genetico
   private condition = {
     quantity: 0,
-    limitExecuted: Number(process.env.LIMIT_EXECUTED ?? 10),
+    limitExecuted: Number(process.env.LIMIT_EXECUTED ?? 0),
   };
 
   constructor(
@@ -19,7 +20,11 @@ export class GeneticService implements IGenetic<void> {
     private readonly mutationService: MutationService,
     private readonly crossoverService: CrossoverService,
     private readonly naturalSelectionService: NaturalSelectionService,
-  ) {}
+  ) {
+    if (this.condition.limitExecuted < 0) {
+      this.condition.limitExecuted = 0;
+    }
+  }
 
   execute(courses: CourseEntity[]) {
     if (this.condition.quantity === 0) {
@@ -61,7 +66,7 @@ export class GeneticService implements IGenetic<void> {
   }
 
   private get bestSchedule(): ScheduleEntity {
-    let best = this.schedules[0];
+    let best: ScheduleEntity = this.schedules[0];
     for (const schedule of this.schedules) {
       if (schedule.score > best.score) {
         best = schedule;
@@ -72,7 +77,13 @@ export class GeneticService implements IGenetic<void> {
 
   private get stop() {
     if (this.bestSchedule.score > 850) {
+      if (config.mode === 'dev') {
+        console.log(`Quantidade de execuções: ${this.condition.quantity}`);
+      }
       return true;
+    }
+    if (this.condition.limitExecuted === 0) {
+      return false;
     }
     return this.condition.quantity >= this.condition.limitExecuted;
   }
