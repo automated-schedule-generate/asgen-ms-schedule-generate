@@ -14,9 +14,10 @@ export class ClassroomModel extends Model<ClassroomModel> {
   declare public id: number;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
+    unique: true,
   })
-  public name: number;
+  public name: string;
 
   @ForeignKey(() => CourseModel)
   @Column({

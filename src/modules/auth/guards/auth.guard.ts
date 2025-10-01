@@ -2,13 +2,13 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../../../common/decorators/set-metadata.decorator';
 import axios, { type AxiosInstance } from 'axios';
-import process from 'node:process';
 import { Request } from 'express';
+import { envData } from 'src/configuration';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   #api: AxiosInstance = axios.create({
-    baseURL: process.env.API_REST_URL,
+    baseURL: envData.apiRestUrl,
     withCredentials: false,
   });
   constructor(private readonly reflector: Reflector) {}

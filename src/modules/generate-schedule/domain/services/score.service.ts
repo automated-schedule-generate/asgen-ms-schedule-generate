@@ -7,10 +7,15 @@ export class ScoreService {
   calculateScore(schedule: ScheduleEntity): number {
     let sum = 0;
     for (const timetable of schedule.timetables) {
-      const clustersElementPoints = this.clustersElementPoints(timetable);
-      const teacherPreferencePoints = this.teacherPreference(timetable);
+      const results: number[] = [
+        this.clustersElementPoints(timetable),
+        this.teacherPreference(timetable),
+        this.teacherConflits(timetable),
+        this.subjectsConflits(timetable),
+        this.roomConflits(timetable),
+      ];
 
-      const result = (clustersElementPoints + teacherPreferencePoints) / 2;
+      const result = results.reduce((a, b) => a + b, 0) / results.length;
       sum += result;
     }
     return sum / schedule.timetables.length;
@@ -64,6 +69,18 @@ export class ScoreService {
   }
 
   private teacherPreference(timetable: ITimetable) {
+    return 1000;
+  }
+
+  private subjectsConflits(timetable: ITimetable) {
+    return 1000;
+  }
+
+  private teacherConflits(timetable: ITimetable) {
+    return 1000;
+  }
+
+  private roomConflits(timetable: ITimetable) {
     return 1000;
   }
 }

@@ -12,17 +12,17 @@ import {
   SubjectTeacherModel,
   TimetableAllocationModel,
 } from 'src/modules/generate-schedule/infrastructure/models';
-import process from 'node:process';
+import { envData } from 'src/configuration';
 
 @Module({
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT ?? 5432),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
+      host: envData.dbHost,
+      port: Number(envData.dbPort ?? 5432),
+      username: envData.dbUser,
+      password: envData.dbPass,
+      database: envData.dbName,
       models: [
         TeacherModel,
         AllocationTimeModel,

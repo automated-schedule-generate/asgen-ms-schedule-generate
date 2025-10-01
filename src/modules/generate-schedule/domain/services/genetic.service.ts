@@ -2,17 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { CourseEntity, ScheduleEntity } from '../entities';
 import { ScoreService, MutationService, CrossoverService, NaturalSelectionService } from './';
 import { IGenetic } from '../interfaces';
-import process from 'node:process';
-import config from 'src/configuration/config';
+import { envData } from 'src/configuration/';
 
 @Injectable()
 export class GeneticService implements IGenetic<void> {
   private schedules: ScheduleEntity[] = [];
+  public started = false;
 
   // quantidade maxima de execuções do algoritmo genetico
   private condition = {
     quantity: 0,
-    limitExecuted: Number(process.env.LIMIT_EXECUTED ?? 0),
+    limitExecuted: Number(envData.limitExecuted ?? 0),
   };
 
   constructor(
@@ -26,7 +26,12 @@ export class GeneticService implements IGenetic<void> {
     }
   }
 
+  public get public_courses(): CourseEntity[] {
+    return this.schedules.map((schedule) => schedule.courses).flat();
+  }
+
   execute(courses: CourseEntity[]) {
+    this.started = true;
     if (this.condition.quantity === 0) {
       this.firstGeneration(courses);
     }
@@ -77,9 +82,6 @@ export class GeneticService implements IGenetic<void> {
 
   private get stop() {
     if (this.bestSchedule.score > 850) {
-      if (config.mode === 'dev') {
-        console.log(`Quantidade de execuções: ${this.condition.quantity}`);
-      }
       return true;
     }
     if (this.condition.limitExecuted === 0) {
@@ -88,5 +90,10 @@ export class GeneticService implements IGenetic<void> {
     return this.condition.quantity >= this.condition.limitExecuted;
   }
 
-  private finish() {}
+  private finish() {
+    this.started = false;
+    if (envData.mode === 'dev') {
+      console.log(`Quantidade de execuções: ${this.condition.quantity}`);
+    }
+  }
 }
