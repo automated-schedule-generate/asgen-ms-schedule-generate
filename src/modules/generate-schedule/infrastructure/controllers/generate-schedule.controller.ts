@@ -1,14 +1,24 @@
-import { Controller, Post } from '@nestjs/common';
-import { GenerateScheduleUseCase } from '../../application/use-cases/generate-schedule.use-case';
-import { Public } from 'src/common/decorators/set-metadata.decorator';
+import { Controller, Get, Post } from '@nestjs/common';
+import { GenerateScheduleUseCase, GetBestScheduleUseCase } from '../../application/use-cases/';
+import { Public } from 'src/common/decorators/';
 
 @Controller('generate-schedule')
 export class GenerateScheduleController {
-  constructor(private readonly generateScheduleUseCase: GenerateScheduleUseCase) {}
+  constructor(
+    private readonly generateScheduleUseCase: GenerateScheduleUseCase,
+    private readonly getBestScheduleUseCase: GetBestScheduleUseCase,
+  ) {}
 
+  // Remove public decorator for production
   @Public()
   @Post('start')
   async start() {
     return await this.generateScheduleUseCase.execute();
+  }
+
+  @Public()
+  @Get('best-current-schedule')
+  async get() {
+    return await this.getBestScheduleUseCase.execute();
   }
 }

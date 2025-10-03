@@ -1,4 +1,4 @@
-import { ITimetable } from '../interfaces';
+import { ITimetable } from '../types';
 import { CourseEntity } from './course.entity';
 import { SubjectEntity } from './subject.entity';
 

@@ -27,6 +27,7 @@ export class GenerateScheduleUseCase implements IUseCase<IResponseSuccess<Course
     }
     const courses = await this.courseRepository.findAllWithSubjectsAndWithClasses();
     const data: CourseEntity[] = courses.map((course) => courseMapper.toEntity(course.dataValues)) ?? [];
+
     setTimeout(() => {
       this.geneticService.execute(data);
     }, 1);

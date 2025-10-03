@@ -9,6 +9,7 @@
 Microsserviço responsável pela geração automática de horários acadêmicos utilizando algoritmos genéticos. Este sistema faz parte do ecossistema ASGEN (Automatic Schedule Generation) do IFPE e foi desenvolvido para otimizar a alocação de turmas, professores, salas de aula e horários, respeitando diversas restrições e preferências.
 
 O sistema utiliza técnicas de computação evolutiva para encontrar soluções otimizadas de grade horária, considerando:
+
 - Disponibilidade de professores
 - Capacidade e recursos das salas
 - Conflitos de horários
@@ -20,23 +21,27 @@ O sistema utiliza técnicas de computação evolutiva para encontrar soluções 
 ## 🚀 Tecnologias Utilizadas
 
 ### Framework e Runtime
+
 - **[NestJS](https://nestjs.com/)** v11.x - Framework Node.js progressivo para aplicações server-side
 - **[Node.js](https://nodejs.org/)** - Runtime JavaScript
 - **[Deno](https://deno.land/)** v2.5.x - Runtime alternativo com suporte nativo a TypeScript
 - **[TypeScript](https://www.typescriptlang.org/)** v5.7.x - Superset tipado de JavaScript
 
 ### Banco de Dados
+
 - **[PostgreSQL](https://www.postgresql.org/)** - Banco de dados relacional
 - **[Sequelize](https://sequelize.org/)** v6.x - ORM para Node.js
 - **[Sequelize-TypeScript](https://github.com/sequelize/sequelize-typescript)** v2.x - Decorators TypeScript para Sequelize
 
 ### Bibliotecas Principais
+
 - **[Express](https://expressjs.com/)** v5.x - Framework web para Node.js
 - **[Axios](https://axios-http.com/)** v1.x - Cliente HTTP
 - **[RxJS](https://rxjs.dev/)** v7.x - Biblioteca para programação reativa
 - **[dotenv](https://github.com/motdotla/dotenv)** v17.x - Gerenciamento de variáveis de ambiente
 
 ### Ferramentas de Desenvolvimento
+
 - **[Jest](https://jestjs.io/)** v30.x - Framework de testes
 - **[ESLint](https://eslint.org/)** v9.x - Linter para JavaScript/TypeScript
 - **[Prettier](https://prettier.io/)** v3.x - Formatador de código
@@ -68,7 +73,7 @@ src/
 │       ├── domain/                   # Camada de domínio
 │       │   ├── entities/             # Entidades de negócio
 │       │   ├── enums/                # Enumerações
-│       │   ├── interfaces/           # Contratos de repositório
+│       │   ├── types/                # Contratos de repositório e/ou tipos e interfaces do sistema
 │       │   └── services/             # Serviços de domínio
 │       │       ├── genetic.service.ts
 │       │       ├── crossover.service.ts
@@ -94,17 +99,20 @@ src/
 ### Camadas da Arquitetura
 
 #### 1. **Domain (Domínio)**
+
 - Contém a lógica de negócio pura
 - Entidades, value objects e interfaces
 - Serviços de domínio (algoritmos genéticos)
 - Independente de frameworks e tecnologias externas
 
 #### 2. **Application (Aplicação)**
+
 - Casos de uso que orquestram a lógica de negócio
 - DTOs para entrada e saída de dados
 - Coordena interações entre domínio e infraestrutura
 
 #### 3. **Infrastructure (Infraestrutura)**
+
 - Implementações concretas de repositórios
 - Controladores HTTP (REST API)
 - Modelos de banco de dados (Sequelize)
@@ -132,16 +140,19 @@ cd refactor-asgen-ms-schedule-generate
 ### 2. Instale as Dependências
 
 #### Usando npm:
+
 ```bash
 npm install
 ```
 
 #### Usando yarn:
+
 ```bash
 yarn install
 ```
 
 #### Usando pnpm:
+
 ```bash
 pnpm install
 ```
@@ -196,11 +207,13 @@ GRANT ALL PRIVILEGES ON DATABASE asgen TO user;
 ### Modo Desenvolvimento
 
 #### Com Node.js (npm):
+
 ```bash
 npm run start:dev
 ```
 
 #### Com Deno:
+
 ```bash
 deno task start:dev
 ```
@@ -210,6 +223,7 @@ A aplicação estará disponível em: `http://localhost:9000/api`
 ### Modo Produção
 
 #### Compilar o projeto:
+
 ```bash
 npm run build
 # ou
@@ -217,6 +231,7 @@ deno task build
 ```
 
 #### Executar em produção:
+
 ```bash
 npm run start:prod
 # ou
@@ -235,19 +250,19 @@ npm run start:debug
 
 ### Scripts Disponíveis
 
-| Script | Descrição | Comando |
-|--------|-----------|---------|
-| **build** | Compila o projeto TypeScript para JavaScript | `npm run build` |
-| **start** | Inicia a aplicação em modo normal | `npm start` |
-| **start:dev** | Inicia em modo desenvolvimento com hot-reload | `npm run start:dev` |
-| **start:debug** | Inicia em modo debug | `npm run start:debug` |
-| **start:prod** | Inicia a aplicação compilada em modo produção | `npm run start:prod` |
-| **lint** | Executa o linter (ESLint) e corrige problemas | `npm run lint` |
-| **format** | Formata o código com Prettier | `npm run format` |
-| **test** | Executa os testes unitários | `npm test` |
-| **test:watch** | Executa testes em modo watch | `npm run test:watch` |
-| **test:cov** | Executa testes com cobertura de código | `npm run test:cov` |
-| **test:e2e** | Executa testes end-to-end | `npm run test:e2e` |
+| Script          | Descrição                                     | Comando               |
+| --------------- | --------------------------------------------- | --------------------- |
+| **build**       | Compila o projeto TypeScript para JavaScript  | `npm run build`       |
+| **start**       | Inicia a aplicação em modo normal             | `npm start`           |
+| **start:dev**   | Inicia em modo desenvolvimento com hot-reload | `npm run start:dev`   |
+| **start:debug** | Inicia em modo debug                          | `npm run start:debug` |
+| **start:prod**  | Inicia a aplicação compilada em modo produção | `npm run start:prod`  |
+| **lint**        | Executa o linter (ESLint) e corrige problemas | `npm run lint`        |
+| **format**      | Formata o código com Prettier                 | `npm run format`      |
+| **test**        | Executa os testes unitários                   | `npm test`            |
+| **test:watch**  | Executa testes em modo watch                  | `npm run test:watch`  |
+| **test:cov**    | Executa testes com cobertura de código        | `npm run test:cov`    |
+| **test:e2e**    | Executa testes end-to-end                     | `npm run test:e2e`    |
 
 ### Build com Deno
 
@@ -537,6 +552,7 @@ Este projeto é parte do sistema ASGEN do IFPE e possui licença **UNLICENSED** 
 ## 📞 Suporte
 
 Para questões, problemas ou sugestões:
+
 - Abra uma issue no repositório
 - Entre em contato com a equipe de desenvolvimento
 

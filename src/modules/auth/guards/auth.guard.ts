@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from '../../../common/decorators/set-metadata.decorator';
+import { IS_PUBLIC_KEY } from 'src/common/decorators';
 import axios, { type AxiosInstance } from 'axios';
 import { Request } from 'express';
 import { envData } from 'src/configuration';

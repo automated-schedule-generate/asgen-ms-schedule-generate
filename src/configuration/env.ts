@@ -1,6 +1,6 @@
 import process from 'node:process';
 
-export default {
+const env = {
   //application
   mode: process.env.MODE ?? 'dev',
   port: process.env.PORT ?? 9000,
@@ -17,3 +17,9 @@ export default {
   // genetic algorithm
   limitExecuted: Number(process.env.LIMIT_EXECUTED ?? 0),
 };
+
+if (env.mode === 'dev') {
+  console.log(env);
+}
+
+export default env;

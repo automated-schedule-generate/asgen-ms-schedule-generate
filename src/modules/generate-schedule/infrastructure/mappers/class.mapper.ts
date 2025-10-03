@@ -1,5 +1,5 @@
 import { ClassEntity } from '../../domain/entities';
-import { IMapper } from '../../domain/interfaces';
+import { IMapper } from '../../domain/types';
 import { ClassModel } from '../models';
 
 export class ClassMapper implements IMapper<ClassEntity, ClassModel> {

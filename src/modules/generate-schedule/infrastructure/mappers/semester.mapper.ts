@@ -1,5 +1,5 @@
 import { SemesterEntity } from '../../domain/entities';
-import { IMapper } from '../../domain/interfaces';
+import { IMapper } from '../../domain/types';
 import { SemesterModel } from '../models';
 
 export class SemesterMapper implements IMapper<SemesterEntity, SemesterModel> {

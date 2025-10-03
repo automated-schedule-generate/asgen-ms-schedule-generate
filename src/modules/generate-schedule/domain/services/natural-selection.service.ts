@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IGenetic } from '../interfaces';
+import { IGenetic } from '../types';
 import { ScheduleEntity } from '../entities';
 
 @Injectable()

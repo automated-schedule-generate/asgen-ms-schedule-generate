@@ -7,7 +7,7 @@ import {
   GeneticService,
   ScoreService,
 } from './domain/services';
-import { GenerateScheduleUseCase } from './application/use-cases/generate-schedule.use-case';
+import { GenerateScheduleUseCase, GetBestScheduleUseCase } from './application/use-cases';
 import {
   CourseRepositoryImpl,
   TeacherRepositoryImpl,
@@ -54,6 +54,7 @@ import {
     GeneticService,
     ScoreService,
     GenerateScheduleUseCase,
+    GetBestScheduleUseCase,
     CourseRepositoryImpl,
     ClassroomRepositoryImpl,
     TeacherRepositoryImpl,

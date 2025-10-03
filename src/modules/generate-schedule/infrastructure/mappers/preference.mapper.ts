@@ -1,5 +1,5 @@
 import { PreferenceEntity } from '../../domain/entities';
-import { IMapper } from '../../domain/interfaces';
+import { IMapper } from '../../domain/types';
 import { PreferenceModel } from '../models';
 
 export class PreferenceMapper implements IMapper<PreferenceEntity, PreferenceModel> {

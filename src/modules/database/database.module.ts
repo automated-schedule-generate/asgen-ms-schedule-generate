@@ -18,11 +18,11 @@ import { envData } from 'src/configuration';
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: envData.dbHost,
-      port: Number(envData.dbPort ?? 5432),
-      username: envData.dbUser,
-      password: envData.dbPass,
-      database: envData.dbName,
+      host: envData.database.host,
+      port: Number(envData.database.port ?? 5432),
+      username: envData.database.user,
+      password: envData.database.pass,
+      database: envData.database.name,
       models: [
         TeacherModel,
         AllocationTimeModel,

@@ -1,6 +1,6 @@
 import { AllocationTimeEntity } from 'src/modules/generate-schedule/domain/entities';
 import { AllocationTimeModel } from '../models';
-import { IMapper } from '../../domain/interfaces';
+import { IMapper } from '../../domain/types';
 
 export class AllocationTimeMapper implements IMapper<AllocationTimeEntity, AllocationTimeModel> {
   toEntity(allocationTimeModel: AllocationTimeModel): AllocationTimeEntity {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ITimetable } from '../interfaces';
+import { ITimetable } from '../types';
 import { SubjectEntity, ScheduleEntity } from '../entities';
 
 @Injectable()
