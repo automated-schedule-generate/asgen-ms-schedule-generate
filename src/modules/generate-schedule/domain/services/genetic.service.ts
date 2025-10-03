@@ -10,7 +10,7 @@ export class GeneticService implements IGenetic<void> {
   public started: boolean = false;
 
   // quantidade maxima de execuções do algoritmo genetico
-  private condition = new GeneticCondition();
+  private condition: GeneticCondition = new GeneticCondition();
 
   constructor(
     private readonly scoreService: ScoreService,
@@ -38,7 +38,7 @@ export class GeneticService implements IGenetic<void> {
 
       this.nextGeneration();
 
-      this.condition.quantity++;
+      this.condition.nextQuantity();
     }
   }
 
