@@ -1,10 +1,11 @@
-import routes from "@/routes";
-import socket from "@/socket";
-import server from "@/config/server";
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { envData } from './configuration';
 
-socket();
-routes();
+async function bootstrap(): Promise<void> {
+  const app = await NestFactory.create(AppModule);
 
-server.listen(9000, () => {
-    console.log("Server is running on port 9000");
-});
+  app.setGlobalPrefix('api');
+  await app.listen(envData.port ?? 3000);
+}
+bootstrap();

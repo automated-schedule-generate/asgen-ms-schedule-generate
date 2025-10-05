@@ -1,675 +1,579 @@
-# ASGen Microservice - Schedule Generator
+# ASGEN - Microsserviço de Geração de Horários
 
-Microsserviço de Geração Automática de Horários do Sistema ASGen do Instituto Federal de Pernambuco (IFPE).
+<p align="center">
+  <img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" />
+</p>
 
 ## 📋 Sobre o Projeto
 
-O ASGen Microservice é um microsserviço especializado desenvolvido em Node.js/TypeScript que implementa algoritmos genéticos para geração automática de horários acadêmicos. Este serviço utiliza técnicas avançadas de otimização computacional para resolver o complexo problema de alocação de horários, considerando múltiplas restrições como disponibilidade de professores, salas, conflitos de horários e preferências.
-
-## 🧬 Algoritmo Genético
-
-O sistema utiliza **Algoritmos Genéticos** (GA) para resolver o problema de otimização de horários. Esta abordagem metaheurística é especialmente adequada para problemas de scheduling complexos como:
-
-### Como Funciona
-
-1. **População Inicial**: Geração de múltiplas soluções (horários) aleatórias
-2. **Avaliação**: Cada solução é avaliada por uma função de fitness que considera:
-   - Conflitos de horários de professores
-   - Conflitos de salas
-   - Disponibilidade de recursos
-   - Preferências de professores
-   - Distribuição equilibrada de aulas
-3. **Seleção**: Escolha das melhores soluções para reprodução
-4. **Cruzamento**: Combinação de soluções para gerar descendentes
-5. **Mutação**: Alterações aleatórias para explorar novas possibilidades
-6. **Evolução**: Repetição do processo por múltiplas gerações até encontrar uma solução ótima
-
-## 🚀 Tecnologias Utilizadas
-
-### Core Technologies
-- **Runtime**: Node.js 18+
-- **Linguagem**: TypeScript 5.8+
-- **Framework Web**: Express.js 5.1
-- **Validação**: Zod 3.25
-- **Real-time**: Socket.io 4.8
-
-### Bibliotecas e Ferramentas
-- **HTTP Client**: Axios 1.11
-- **CORS**: Cors 2.8
-- **Environment**: Dotenv 16.5
-- **Serialization**: Flatted 3.3 (para objetos circulares)
-
-### Ferramentas de Desenvolvimento
-- **Transpilador**: TypeScript Compiler
-- **Hot Reload**: Nodemon
-- **Path Mapping**: TSConfig Paths
-- **Minification**: Terser
-- **Formatação**: Prettier
-- **Containerização**: Docker
-
-## 🏗️ Arquitetura do Sistema
-
-### Estrutura de Diretórios
-
-```
-asgen-ms-schedule-generate/
-├── src/
-│   ├── classes/                    # Classes principais do algoritmo
-│   │   ├── genetic-algorithm/      # Implementação do algoritmo genético
-│   │   │   ├── interfaces/         # Interfaces TypeScript
-│   │   │   ├── generate-generations.ts
-│   │   │   ├── validate-timetable.ts
-│   │   │   └── mixing-randomly-subjects-from-the-semester.ts
-│   │   ├── generate-timetable.ts   # Classe principal de geração
-│   │   └── generate-base-schedule-grid-by-course.ts
-│   ├── config/                     # Configurações do servidor
-│   │   ├── server.ts              # Configuração do Express
-│   │   ├── socketServer.ts        # Configuração do Socket.io
-│   │   ├── app.ts                 # Aplicação Express
-│   │   └── env.ts                 # Variáveis de ambiente
-│   ├── db/                        # Tipos de dados e persistência
-│   │   ├── types/                 # Definições de tipos
-│   │   └── index.ts               # Operações de banco/arquivo
-│   ├── routes/                    # Rotas da API REST
-│   ├── services/                  # Serviços externos
-│   ├── socket/                    # Handlers de WebSocket
-│   ├── validation/                # Esquemas de validação Zod
-│   └── main.ts                    # Ponto de entrada da aplicação
-├── dist/                          # Build de desenvolvimento
-├── dist-min/                      # Build minificada para produção
-├── timetables.json               # Cache de horários gerados
-├── docker-compose.yml            # Configuração Docker
-└── package.json                  # Dependências e scripts
-```
-
-### Componentes Principais
-
-#### 🧬 Genetic Algorithm Engine
-- **GenerateTimetable**: Classe principal que coordena todo o processo
-- **GeneticAlgorithm**: Implementação do algoritmo genético
-- **ValidateTimetable**: Validação de soluções geradas
-- **GenerateGenerations**: Evolução de populações
-
-#### 🌐 API REST
-- **GET /**: Endpoint de saúde do serviço
-- **POST /start**: Iniciar geração de horários
-- **GET /progress**: Monitorar progresso da geração
-- **GET /temporary-timetables**: Recuperar horários gerados
-
-#### 📡 WebSocket Server
-- **Real-time Progress**: Atualizações em tempo real do progresso
-- **Event Broadcasting**: Notificações de conclusão
-- **Client Synchronization**: Sincronização com múltiplos clientes
-
-## 🛠️ Instalação e Configuração
-
-### Pré-requisitos
-
-- Node.js 18+
-- npm/yarn/pnpm/bun
-- Docker & Docker Compose (opcional)
-
-### Instalação Local
-
-1. **Clone o repositório**
-   ```bash
-   git clone <url-do-repositorio>
-   cd asgen-ms-schedule-generate
-   ```
-
-2. **Instale as dependências**
-   ```bash
-   # npm
-   npm install
-
-   # yarn
-   yarn install
-
-   # pnpm
-   pnpm install
-
-   # bun
-   bun install
-   ```
-
-3. **Configure o ambiente**
-   ```bash
-   cp .env.example .env
-   ```
-
-4. **Configure as variáveis de ambiente**
-   ```env
-   # URL da API REST (backend Laravel)
-   API_REST_URL=http://localhost
-
-   # Credenciais para autenticação na API REST
-   API_REST_LOGIN=admin@ifpe.edu.br
-   API_REST_PASSWORD=senha_segura
-   ```
-
-### Instalação com Docker
-
-1. **Configure o ambiente**
-   ```bash
-   cp .env.example .env
-   # Edite as variáveis conforme necessário
-   ```
-
-2. **Execute com Docker Compose**
-   ```bash
-   docker-compose up -d
-   ```
-
-## 🚀 Comandos de Execução
-
-### Desenvolvimento
-
-```bash
-# Servidor de desenvolvimento
-npm run dev
-yarn dev
-pnpm run dev
-bun run dev
-
-# Servidor com hot reload (recomendado)
-npm run dev:watch
-yarn dev:watch
-pnpm run dev:watch
-bun run dev:watch
-
-# Acesse: http://localhost:9000
-```
-
-### Produção
-
-```bash
-# Build para produção (com minificação)
-npm run build
-yarn build
-pnpm run build
-bun run build
-
-# Executar versão de produção
-npm run start:prod
-yarn start:prod
-pnpm run start:prod
-bun run start:prod
-
-# Executar versão normal (desenvolvimento)
-npm run start
-yarn start
-pnpm run start
-bun run start
-```
-
-### Outros Comandos
-
-```bash
-# Formatação de código
-npm run format
-yarn format
-pnpm run format
-bun run format
-
-# Build sem minificação
-npm run start
-yarn start
-pnpm run start
-bun run start
-```
-
-### Docker
-
-```bash
-# Executar com Docker
-docker-compose up -d
-
-# Ver logs
-docker-compose logs -f app
-
-# Parar serviços
-docker-compose down
-
-# Rebuild da imagem
-docker-compose up --build
-```
-
-## 📡 API Endpoints
-
-### Health Check
-```http
-GET /
-```
-**Resposta:**
-```json
-{
-    "message": "Welcome to Timetable Generator microservice"
-}
-```
-
-### Iniciar Geração de Horários
-```http
-POST /start
-Content-Type: application/json
-
-{
-    "courses": [
-        {
-            "id": 1,
-            "name": "Análise e Desenvolvimento de Sistemas",
-            "semesters": [
-                {
-                    "id": 1,
-                    "name": "1º Semestre",
-                    "subjects": [...],
-                    "classes": [...]
-                }
-            ]
-        }
-    ]
-}
-```
-
-**Resposta:**
-```json
-{
-    "message": "Started generating timetables"
-}
-```
-
-### Monitorar Progresso
-```http
-GET /progress
-```
-
-**Resposta:**
-```json
-{
-    "status": "in_progress", // "in_progress" | "completed"
-    "progress": 45 // 0-100
-}
-```
-
-### Obter Horários Gerados
-```http
-GET /temporary-timetables
-```
-
-**Resposta:**
-```json
-{
-    "timetables": [
-        {
-            "courseId": 1,
-            "semesterId": 1,
-            "classId": 1,
-            "schedule": {
-                "monday": [...],
-                "tuesday": [...],
-                // ...
-            }
-        }
-    ]
-}
-```
-
-## 🧬 Algoritmo Genético - Detalhes Técnicos
-
-### Parâmetros de Configuração
-
-```typescript path=/home/guilherme/projects/ifpe/asgen/asgen-ms-schedule-generate/src/classes/generate-timetable.ts start=10
-async start(data: CourseType[], number_of_simulations: number = 1000) {
-    // Número padrão de simulações/gerações: 1000
-    // Pode ser ajustado conforme necessidade
-}
-```
-
-### Função de Fitness
-
-A função de fitness avalia cada solução considerando:
-
-1. **Conflitos Críticos** (peso alto):
-   - Professor em dois locais simultaneamente
-   - Sala ocupada por múltiplas turmas
-   - Aulas fora do horário disponível
-
-2. **Conflitos Moderados** (peso médio):
-   - Distribuição desbalanceada de aulas
-   - Janelas excessivas entre aulas
-   - Violação de preferências de professores
-
-3. **Otimizações** (peso baixo):
-   - Minimização de deslocamentos
-   - Maximização de preferências
-   - Equilíbrio na carga de trabalho
-
-### Classes do Algoritmo
-
-#### GenerateTimetable
-```typescript path=null start=null
-class GenerateTimetable {
-    private progress: number = 0;
-    
-    async start(courses: CourseType[], simulations: number): Promise<void> {
-        // Coordena todo o processo de geração
-    }
-    
-    getProgress(): number {
-        return this.progress;
-    }
-}
-```
-
-#### GeneticAlgorithm Interface
-```typescript path=/home/guilherme/projects/ifpe/asgen/asgen-ms-schedule-generate/src/classes/genetic-algorithm/interfaces/genetic-algorithm.ts start=1
-interface IGeneticAlgorithm {
-    start(...args: any): any;
-}
-```
-
-### Processo de Evolução
-
-1. **Inicialização**: `mixingRandomlySubjectsFromTheSemester`
-2. **Avaliação**: `validateTimetable`  
-3. **Evolução**: `generateGenerations`
-4. **Persistência**: Salvar melhor solução encontrada
-
-## 🔧 Configurações Avançadas
-
-### Performance Optimization
-
-```json
-// package.json - script de produção
-"start:prod": "node --max-old-space-size=6144 dist-min/main.js"
-```
-- **Memory Allocation**: 6GB para processos intensivos
-- **Minification**: Código otimizado para produção
-- **Build Pipeline**: TypeScript → JavaScript → Minification
-
-### Socket.io Configuration
-
-```typescript path=null start=null
-// Configuração WebSocket para real-time updates
-io.on('connection', (socket) => {
-    socket.on('subscribe_progress', (data) => {
-        // Cliente se inscreve para receber atualizações
-    });
-});
-
-// Emissão de progresso
-io.emit('progress_update', {
-    progress: currentProgress,
-    status: currentStatus,
-    estimatedTime: remainingTime
-});
-```
-
-### Validação de Dados
-
-```typescript path=null start=null
-// Validação com Zod
-const manyCourseSchema = z.array(z.object({
-    id: z.number(),
-    name: z.string(),
-    semesters: z.array(semesterSchema)
-}));
-
-// Validação automática nos endpoints
-const validate = manyCourseSchema.safeParse(requestData);
-if (!validate.success) {
-    return res.status(400).json({
-        error: validate.error,
-        message: "Invalid data format"
-    });
-}
-```
-
-## 📊 Monitoramento e Performance
-
-### Métricas de Performance
-
-- **Tempo de Geração**: Varia conforme complexidade (1-30 minutos)
-- **Memory Usage**: Pode usar até 6GB em casos complexos
-- **CPU Intensivo**: Utiliza todos os cores disponíveis
-- **Convergência**: Tipicamente converge em 500-1500 gerações
-
-### Logs e Debug
-
-```bash
-# Logs em tempo real durante desenvolvimento
-yarn dev:watch
-
-# Logs de produção
-tail -f logs/production.log
-
-# Debug via Socket.io
-# Conecte-se ao WebSocket na porta 9000 para acompanhar progresso
-```
-
-### Otimizações Implementadas
-
-- **Parallel Processing**: Avaliação paralela de soluções
-- **Memory Management**: Garbage collection otimizada
-- **Caching**: Cache de soluções parciais
-- **Early Termination**: Parada antecipada quando solução ótima é encontrada
-
-## 🔄 Integração com o Sistema ASGen
-
-### Fluxo de Comunicação
-
-1. **API REST** recebe solicitação de geração de horários
-2. **API REST** faz requisição POST para `/start` do microsserviço
-3. **Frontend** monitora progresso via WebSocket ou polling `/progress`
-4. **Microsserviço** processa usando algoritmo genético
-5. **Microsserviço** notifica conclusão via WebSocket
-6. **API REST** recupera resultado via `/temporary-timetables`
-7. **API REST** persiste resultado no banco de dados
-
-### Autenticação
-
-```env
-# Credenciais para acesso à API REST
-API_REST_LOGIN=admin@ifpe.edu.br
-API_REST_PASSWORD=senha_segura
-```
-
-### Formato de Dados
-
-```typescript path=null start=null
-// Estrutura de entrada esperada
-interface CourseType {
-    id: number;
-    name: string;
-    semesters: SemesterType[];
-}
-
-interface SemesterType {
-    id: number;
-    name: string;
-    subjects: SubjectType[];
-    classes: ClassType[];
-}
-
-// Estrutura de saída gerada
-interface TimetableResult {
-    courseId: number;
-    semesterId: number;
-    classId: number;
-    fitness: number; // Qualidade da solução (0-100)
-    schedule: WeekSchedule;
-    conflicts: ConflictInfo[];
-}
-```
-
-## 🧪 Testes e Validação
-
-### Tipos de Teste
-
-1. **Unit Tests**: Funções individuais do algoritmo
-2. **Integration Tests**: Fluxo completo de geração
-3. **Performance Tests**: Benchmarks de tempo e memória
-4. **Stress Tests**: Cenários com muitos cursos/disciplinas
-
-### Executar Testes
-
-```bash
-# Testes unitários (quando implementados)
-npm run test
-yarn test
-
-# Teste manual via API
-curl -X POST http://localhost:9000/start \
-  -H "Content-Type: application/json" \
-  -d @test-data.json
-
-# Monitorar progresso
-curl http://localhost:9000/progress
-```
-
-### Validação de Resultados
-
-O sistema implementa validação rigorosa:
-- **Zero conflicts**: Nenhum conflito crítico é permitido
-- **Constraint satisfaction**: Todas as restrições são respeitadas
-- **Optimization metrics**: Métricas de qualidade são calculadas
-
-## 🚀 Deploy e Produção
-
-### Build Otimizada
-
-```bash
-# Build completa (transpilação + minificação)
-yarn build
-
-# Estrutura gerada:
-# dist/        - Build de desenvolvimento
-# dist-min/    - Build minificada para produção
-```
-
-### Docker em Produção
-
-```dockerfile
-FROM node:18-alpine
-
-WORKDIR /app
-
-# Copiar package.json e yarn.lock
-COPY package.json yarn.lock ./
-
-# Instalar apenas dependências de produção
-RUN yarn install --frozen-lockfile --production
-
-# Copiar código fonte
-COPY . .
-
-# Build para produção
-RUN yarn build
-
-# Expor porta
-EXPOSE 9000
-
-# Comando de execução
-CMD ["yarn", "start:prod"]
-```
-
-### Variáveis de Ambiente (Produção)
-
-```env
-NODE_ENV=production
-API_REST_URL=https://api.asgen.ifpe.edu.br
-API_REST_LOGIN=microservice@ifpe.edu.br
-API_REST_PASSWORD=senha_super_segura
-PORT=9000
-```
-
-### Monitoramento em Produção
-
-- **Health Checks**: Endpoint `/` para verificação de saúde
-- **Memory Monitoring**: Limite de 6GB configurado
-- **Process Management**: PM2 ou similar recomendado
-- **Logs Centralizados**: Winston ou similar para logs estruturados
-
-## 👥 Equipe de Desenvolvimento
-
-Este projeto foi desenvolvido pelos seguintes contribuidores:
-
-- **Guilherme Valença** - [`gvrp@discente.ifpe.edu.br`](mailto:gvrp@discente.ifpe.edu.br) - [GitHub](https://github.com/Guilhermevalenca)
-- **Claudiane Rodrigues** - [`cra@discente.ifpe.edu.br`](mailto:cra@discente.ifpe.edu.br) - [GitHub](https://github.com/RodriguesClaudiane)  
-- **Weydson Lino** - [`wls10@discente.ifpe.edu.br`](mailto:wls10@discente.ifpe.edu.br) - [GitHub](https://github.com/weydsonlino)
-- **Joana Gomes** - [`jgn@discente.ifpe.edu.br`](mailto:jgn@discente.ifpe.edu.br) - [GitHub](https://github.com/JoanaG0mes)
-
-## 🤝 Contribuição
-
-### Estrutura de Contribuição
-
-1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/algoritmo-melhorado`)
-3. Commit suas mudanças (`git commit -m 'feat: melhora algoritmo genético'`)
-4. Push para a branch (`git push origin feature/algoritmo-melhorado`)
-5. Abra um Pull Request
-
-### Padrões de Código
-
-- **TypeScript Strict**: Tipagem rigorosa obrigatória
-- **Prettier**: Formatação automática
-- **Conventional Commits**: Padrão de commits
-- **ESLint**: Regras de qualidade (quando configurado)
-
-### Áreas para Contribuição
-
-- **Performance**: Otimizações do algoritmo genético
-- **Algoritmos**: Implementação de novos algoritmos (Simulated Annealing, Tabu Search)
-- **Validação**: Melhoria das funções de fitness
-- **Testes**: Implementação de testes automatizados
-- **Documentação**: Aprimoramento da documentação técnica
-
-## 📝 Licença
-
-Este projeto está licenciado sob a licença ISC.
-
-## 🆘 Suporte e Recursos
-
-### Documentação Técnica
-- **Algoritmos Genéticos**: [Genetic Algorithms Guide](https://en.wikipedia.org/wiki/Genetic_algorithm)
-- **Scheduling Problems**: [Job Shop Scheduling](https://en.wikipedia.org/wiki/Job_shop_scheduling)
-- **TypeScript**: [Official Documentation](https://www.typescriptlang.org/docs/)
-- **Socket.io**: [Socket.io Documentation](https://socket.io/docs/)
-
-### Suporte
-- 📧 **Email**: Entre em contato com a equipe de desenvolvimento
-- 🐛 **Issues**: Abra issues no repositório GitHub
-- 📚 **Wiki**: Documentação detalhada no repositório
-
-## 🎯 Roadmap e Futuras Melhorias
-
-### Curto Prazo
-- [ ] **Unit Tests**: Implementação de testes automatizados
-- [ ] **Error Handling**: Melhoria no tratamento de erros
-- [ ] **Logging**: Sistema estruturado de logs
-- [ ] **Metrics**: Coleta de métricas de performance
-
-### Médio Prazo  
-- [ ] **Multi-Algorithm**: Suporte a múltiplos algoritmos (SA, Tabu Search)
-- [ ] **Parallel Processing**: Paralelização mais eficiente
-- [ ] **Caching**: Sistema avançado de cache
-- [ ] **API Documentation**: Swagger/OpenAPI spec
-
-### Longo Prazo
-- [ ] **Machine Learning**: Integração com ML para melhores heurísticas
-- [ ] **Distributed Computing**: Processamento distribuído
-- [ ] **Real-time Constraints**: Restrições dinâmicas em tempo real
-- [ ] **Advanced Visualization**: Visualização avançada do progresso
-
-### Melhorias Algorítmicas
-- [ ] **Adaptive Parameters**: Parâmetros adaptativos do GA
-- [ ] **Hybrid Approaches**: Combinação GA + algoritmos locais
-- [ ] **Multi-objective**: Otimização multi-objetivo
-- [ ] **Constraint Programming**: Integração com CP
+Microsserviço responsável pela geração automática de horários acadêmicos utilizando algoritmos genéticos. Este sistema faz parte do ecossistema ASGEN (Automatic Schedule Generation) do IFPE e foi desenvolvido para otimizar a alocação de turmas, professores, salas de aula e horários, respeitando diversas restrições e preferências.
+
+O sistema utiliza técnicas de computação evolutiva para encontrar soluções otimizadas de grade horária, considerando:
+
+- Disponibilidade de professores
+- Capacidade e recursos das salas
+- Conflitos de horários
+- Preferências e restrições específicas
+- Carga horária das disciplinas
 
 ---
 
-Desenvolvido com 🧬 pela equipe do IFPE
+## 🚀 Tecnologias Utilizadas
 
-**Stack**: Node.js + TypeScript + Genetic Algorithms + Socket.io + Express.js
+### Framework e Runtime
 
-**Algoritmo**: Genetic Algorithm com otimizações para Schedule Generation
+- **[NestJS](https://nestjs.com/)** v11.x - Framework Node.js progressivo para aplicações server-side
+- **[Node.js](https://nodejs.org/)** - Runtime JavaScript
+- **[Deno](https://deno.land/)** v2.5.x - Runtime alternativo com suporte nativo a TypeScript
+- **[TypeScript](https://www.typescriptlang.org/)** v5.7.x - Superset tipado de JavaScript
+
+### Banco de Dados
+
+- **[PostgreSQL](https://www.postgresql.org/)** - Banco de dados relacional
+- **[Sequelize](https://sequelize.org/)** v6.x - ORM para Node.js
+- **[Sequelize-TypeScript](https://github.com/sequelize/sequelize-typescript)** v2.x - Decorators TypeScript para Sequelize
+
+### Bibliotecas Principais
+
+- **[Express](https://expressjs.com/)** v5.x - Framework web para Node.js
+- **[Axios](https://axios-http.com/)** v1.x - Cliente HTTP
+- **[RxJS](https://rxjs.dev/)** v7.x - Biblioteca para programação reativa
+- **[dotenv](https://github.com/motdotla/dotenv)** v17.x - Gerenciamento de variáveis de ambiente
+
+### Ferramentas de Desenvolvimento
+
+- **[Jest](https://jestjs.io/)** v30.x - Framework de testes
+- **[ESLint](https://eslint.org/)** v9.x - Linter para JavaScript/TypeScript
+- **[Prettier](https://prettier.io/)** v3.x - Formatador de código
+- **[ts-jest](https://kulshekhar.github.io/ts-jest/)** v29.x - Preprocessador Jest para TypeScript
+
+---
+
+## 📁 Arquitetura do Projeto
+
+O projeto segue os princípios da **Arquitetura Limpa (Clean Architecture)** e **DDD (Domain-Driven Design)**, organizando o código em camadas bem definidas:
+
+```
+src/
+├── modules/                          # Módulos da aplicação
+│   ├── auth/                         # Módulo de autenticação
+│   │   ├── domain/                   # Lógica de negócio
+│   │   │   └── interfaces/           # Contratos e interfaces
+│   │   ├── guards/                   # Guards de autenticação
+│   │   └── auth.module.ts
+│   │
+│   ├── database/                     # Módulo de banco de dados
+│   │   └── database.module.ts        # Configuração do Sequelize
+│   │
+│   └── generate-schedule/            # Módulo principal de geração de horários
+│       ├── application/              # Camada de aplicação
+│       │   ├── use-cases/            # Casos de uso
+│       │   └── dtos/                 # Data Transfer Objects
+│       │
+│       ├── domain/                   # Camada de domínio
+│       │   ├── entities/             # Entidades de negócio
+│       │   ├── enums/                # Enumerações
+│       │   ├── types/                # Contratos de repositório e/ou tipos e interfaces do sistema
+│       │   └── services/             # Serviços de domínio
+│       │       ├── genetic.service.ts
+│       │       ├── crossover.service.ts
+│       │       ├── mutation.service.ts
+│       │       ├── natural-selection.service.ts
+│       │       └── score.service.ts
+│       │
+│       ├── infrastructure/           # Camada de infraestrutura
+│       │   ├── controllers/          # Controladores REST
+│       │   ├── repositories/         # Implementações de repositórios
+│       │   ├── models/               # Modelos Sequelize
+│       │   ├── mappers/              # Mapeadores de dados
+│       │   └── workers/              # Workers para processamento assíncrono
+│       │
+│       └── generate-schedule.module.ts
+│
+├── app.module.ts                     # Módulo raiz
+├── app.controller.ts                 # Controlador raiz
+├── app.service.ts                    # Serviço raiz
+└── main.ts                           # Ponto de entrada da aplicação
+```
+
+### Camadas da Arquitetura
+
+#### 1. **Domain (Domínio)**
+
+- Contém a lógica de negócio pura
+- Entidades, value objects e interfaces
+- Serviços de domínio (algoritmos genéticos)
+- Independente de frameworks e tecnologias externas
+
+#### 2. **Application (Aplicação)**
+
+- Casos de uso que orquestram a lógica de negócio
+- DTOs para entrada e saída de dados
+- Coordena interações entre domínio e infraestrutura
+
+#### 3. **Infrastructure (Infraestrutura)**
+
+- Implementações concretas de repositórios
+- Controladores HTTP (REST API)
+- Modelos de banco de dados (Sequelize)
+- Workers para processamento assíncrono
+- Integrações com serviços externos
+
+---
+
+## ⚙️ Instalação e Configuração
+
+### Pré-requisitos
+
+- **Node.js** >= 18.x
+- **npm** >= 9.x (ou **yarn/pnpm**)
+- **PostgreSQL** >= 13.x
+- **Deno** >= 2.x (opcional, para execução alternativa)
+
+### 1. Clone o Repositório
+
+```bash
+git clone <repository-url>
+cd refactor-asgen-ms-schedule-generate
+```
+
+### 2. Instale as Dependências
+
+#### Usando npm:
+
+```bash
+npm install
+```
+
+#### Usando yarn:
+
+```bash
+yarn install
+```
+
+#### Usando pnpm:
+
+```bash
+pnpm install
+```
+
+### 3. Configure as Variáveis de Ambiente
+
+Copie o arquivo de exemplo e configure as variáveis:
+
+```bash
+cp .env.example .env
+```
+
+Edite o arquivo `.env` com suas configurações:
+
+```env
+# Configurações da Aplicação
+PORT=9000                              # Porta onde a aplicação será executada
+
+# Configurações do Banco de Dados PostgreSQL
+DB_HOST=localhost                      # Host do banco de dados
+DB_PORT=5432                          # Porta do PostgreSQL
+DB_USER=user                          # Usuário do banco de dados
+DB_PASS=password                      # Senha do banco de dados
+DB_NAME=asgen                         # Nome do banco de dados
+
+# Configurações de API REST Externa
+API_REST_URL=localhost:8000           # URL da API REST principal do sistema ASGEN
+```
+
+### 4. Configure o Banco de Dados
+
+Certifique-se de que o PostgreSQL está rodando e crie o banco de dados:
+
+```bash
+# Acesse o PostgreSQL
+psql -U postgres
+
+# Crie o banco de dados
+CREATE DATABASE asgen;
+
+# Crie o usuário (se necessário)
+CREATE USER user WITH PASSWORD 'password';
+
+# Conceda permissões
+GRANT ALL PRIVILEGES ON DATABASE asgen TO user;
+```
+
+---
+
+## 🏃 Executando a Aplicação
+
+### Modo Desenvolvimento
+
+#### Com Node.js (npm):
+
+```bash
+npm run start:dev
+```
+
+#### Com Deno:
+
+```bash
+deno task start:dev
+```
+
+A aplicação estará disponível em: `http://localhost:9000/api`
+
+### Modo Produção
+
+#### Compilar o projeto:
+
+```bash
+npm run build
+# ou
+deno task build
+```
+
+#### Executar em produção:
+
+```bash
+npm run start:prod
+# ou
+deno task start:prod
+```
+
+### Modo Debug
+
+```bash
+npm run start:debug
+```
+
+---
+
+## 🔨 Opções de Build
+
+### Scripts Disponíveis
+
+| Script          | Descrição                                     | Comando               |
+| --------------- | --------------------------------------------- | --------------------- |
+| **build**       | Compila o projeto TypeScript para JavaScript  | `npm run build`       |
+| **start**       | Inicia a aplicação em modo normal             | `npm start`           |
+| **start:dev**   | Inicia em modo desenvolvimento com hot-reload | `npm run start:dev`   |
+| **start:debug** | Inicia em modo debug                          | `npm run start:debug` |
+| **start:prod**  | Inicia a aplicação compilada em modo produção | `npm run start:prod`  |
+| **lint**        | Executa o linter (ESLint) e corrige problemas | `npm run lint`        |
+| **format**      | Formata o código com Prettier                 | `npm run format`      |
+| **test**        | Executa os testes unitários                   | `npm test`            |
+| **test:watch**  | Executa testes em modo watch                  | `npm run test:watch`  |
+| **test:cov**    | Executa testes com cobertura de código        | `npm run test:cov`    |
+| **test:e2e**    | Executa testes end-to-end                     | `npm run test:e2e`    |
+
+### Build com Deno
+
+```bash
+# Desenvolvimento
+deno task start:dev
+
+# Verificação de tipos
+deno task check
+
+# Produção
+deno task build
+deno task start:prod
+```
+
+### Build para Docker (Futuro)
+
+```bash
+# Construir imagem
+docker build -t asgen-schedule-generate .
+
+# Executar container
+docker run -p 9000:9000 --env-file .env asgen-schedule-generate
+```
+
+---
+
+## 🧪 Testes
+
+### Executar Testes Unitários
+
+```bash
+npm test
+```
+
+### Executar com Cobertura
+
+```bash
+npm run test:cov
+```
+
+### Executar Testes E2E
+
+```bash
+npm run test:e2e
+```
+
+### Executar em Modo Watch
+
+```bash
+npm run test:watch
+```
+
+---
+
+## 📊 Trabalho Realizado
+
+### ✅ Funcionalidades Implementadas
+
+1. **Arquitetura Limpa**
+   - Separação clara de responsabilidades em camadas
+   - Inversão de dependências
+   - Testabilidade e manutenibilidade
+
+2. **Algoritmo Genético**
+   - Implementação completa do algoritmo genético para otimização de horários
+   - Serviços especializados:
+     - `GeneticService`: Orquestração do algoritmo
+     - `CrossoverService`: Operador de cruzamento
+     - `MutationService`: Operador de mutação
+     - `NaturalSelectionService`: Seleção natural
+     - `ScoreService`: Função de aptidão (fitness)
+
+3. **Módulos Principais**
+   - **Auth Module**: Autenticação e autorização com guards
+   - **Database Module**: Configuração e gerenciamento do banco de dados
+   - **Generate Schedule Module**: Lógica principal de geração de horários
+
+4. **Repositórios**
+   - `CourseRepository`: Gerenciamento de cursos
+   - `TeacherRepository`: Gerenciamento de professores
+   - `SubjectRepository`: Gerenciamento de disciplinas
+   - `ClassroomRepository`: Gerenciamento de salas
+   - `TimetableRepository`: Gerenciamento de horários
+
+5. **Workers Assíncronos**
+   - Processamento em background para geração de horários
+   - Gerenciamento de filas de processamento
+
+6. **API REST**
+   - Endpoints para geração e consulta de horários
+   - Validação de entrada com DTOs
+   - Tratamento de erros
+
+7. **Integração com Banco de Dados**
+   - Modelos Sequelize para todas as entidades
+   - Migrações e seeders (se aplicável)
+   - Relacionamentos entre entidades
+
+### 🔧 Refatorações Realizadas
+
+- Migração de arquitetura monolítica para microsserviço
+- Implementação de padrões de design (Repository, Factory, Strategy)
+- Adoção de TypeScript strict mode
+- Configuração de linting e formatação
+- Suporte dual para Node.js e Deno
+
+---
+
+## 🔮 Possíveis Trabalhos Futuros
+
+### Curto Prazo
+
+1. **Testes**
+   - [ ] Aumentar cobertura de testes unitários para 80%+
+   - [ ] Implementar testes de integração completos
+   - [ ] Adicionar testes E2E para fluxos principais
+
+2. **Documentação**
+   - [ ] Documentação da API com Swagger/OpenAPI
+   - [ ] Diagramas de arquitetura detalhados
+   - [ ] Guia de contribuição
+
+3. **Performance**
+   - [ ] Implementar cache (Redis) para consultas frequentes
+   - [ ] Otimizar consultas ao banco de dados
+   - [ ] Profiling do algoritmo genético
+
+4. **Monitoramento**
+   - [ ] Integração com ferramentas de APM (Application Performance Monitoring)
+   - [ ] Logging estruturado com Winston ou Pino
+   - [ ] Métricas e dashboards (Prometheus + Grafana)
+
+### Médio Prazo
+
+5. **Containerização**
+   - [ ] Dockerfile otimizado multi-stage
+   - [ ] Docker Compose para ambiente completo
+   - [ ] Kubernetes manifests para deploy
+
+6. **CI/CD**
+   - [ ] Pipeline de integração contínua
+   - [ ] Testes automatizados em PRs
+   - [ ] Deploy automatizado
+
+7. **Melhorias no Algoritmo**
+   - [ ] Implementar estratégias adaptativas de mutação
+   - [ ] Adicionar algoritmos de busca local (hill climbing)
+   - [ ] Paralelização do processamento genético
+
+8. **API Melhorias**
+   - [ ] Versionamento de API (v1, v2)
+   - [ ] Rate limiting
+   - [ ] Autenticação JWT aprimorada
+   - [ ] WebSockets para atualizações em tempo real
+
+### Longo Prazo
+
+9. **Escalabilidade**
+   - [ ] Suporte a múltiplos workers distribuídos
+   - [ ] Message broker (RabbitMQ/Kafka) para comunicação entre serviços
+   - [ ] Sharding de banco de dados
+
+10. **Machine Learning**
+    - [ ] Análise preditiva de conflitos de horário
+    - [ ] Recomendação de horários baseada em histórico
+    - [ ] Ajuste automático de parâmetros do algoritmo genético
+
+11. **Features Adicionais**
+    - [ ] Interface gráfica para visualização de horários
+    - [ ] Exportação em múltiplos formatos (PDF, Excel, iCal)
+    - [ ] Notificações por email/SMS
+    - [ ] Sistema de aprovação de horários
+
+12. **Internacionalização**
+    - [ ] Suporte a múltiplos idiomas (i18n)
+    - [ ] Suporte a diferentes fusos horários
+
+---
+
+## 🏗️ Padrões de Design Utilizados
+
+- **Repository Pattern**: Abstração da camada de dados
+- **Dependency Injection**: Gerenciamento de dependências com NestJS
+- **Factory Pattern**: Criação de objetos complexos
+- **Strategy Pattern**: Diferentes estratégias para operadores genéticos
+- **Observer Pattern**: RxJS para programação reativa
+- **Guard Pattern**: Proteção de rotas e autenticação
+
+---
+
+## 📚 Recursos e Documentação
+
+- [Documentação do NestJS](https://docs.nestjs.com)
+- [Documentação do Sequelize](https://sequelize.org/docs/v6/)
+- [Documentação do Deno](https://deno.land/manual)
+- [Algoritmos Genéticos - Teoria](https://en.wikipedia.org/wiki/Genetic_algorithm)
+
+---
+
+## 🤝 Contribuindo
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+### Padrões de Commit
+
+Utilize [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+feat: adiciona nova funcionalidade
+fix: corrige bug
+docs: atualiza documentação
+style: formatação de código
+refactor: refatoração de código
+test: adiciona ou atualiza testes
+chore: tarefas de manutenção
+```
+
+---
+
+## 📄 Licença
+
+Este projeto é parte do sistema ASGEN do IFPE e possui licença **UNLICENSED** (uso restrito à instituição).
+
+---
+
+## 👥 Equipe e Contribuidores
+
+**Instituto Federal de Pernambuco (IFPE)**
+
+### Contribuidores do Projeto
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Guilhermevalenca">
+        <img src="https://github.com/Guilhermevalenca.png" width="100px;" alt="Guilherme Valença"/><br />
+        <sub><b>Guilherme Valença</b></sub>
+      </a><br />
+      <sub>Desenvolvedor Fullstack e DBA</sub><br />
+      <sub>📧 gvrp@discente.ifpe.edu.br</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/RodriguesClaudiane">
+        <img src="https://github.com/RodriguesClaudiane.png" width="100px;" alt="Claudiane Rodrigues"/><br />
+        <sub><b>Claudiane Rodrigues</b></sub>
+      </a><br />
+      <sub>Desenvolvedora Frontend</sub><br />
+      <sub>📧 cra@discente.ifpe.edu.br</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/weydsonlino">
+        <img src="https://github.com/weydsonlino.png" width="100px;" alt="Weydson Lino"/><br />
+        <sub><b>Weydson Lino</b></sub>
+      </a><br />
+      <sub>Desenvolvedor Backend</sub><br />
+      <sub>📧 wls10@discente.ifpe.edu.br</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/JoanaG0mes">
+        <img src="https://github.com/JoanaG0mes.png" width="100px;" alt="Joana Gomes"/><br />
+        <sub><b>Joana Gomes</b></sub>
+      </a><br />
+      <sub>Desenvolvedora Frontend</sub><br />
+      <sub>📧 jgn@discente.ifpe.edu.br</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/lilialnas">
+        <img src="https://github.com/lilialnas.png" width="100px;" alt="Liliane Sales"/><br />
+        <sub><b>Liliane Sales</b></sub>
+      </a><br />
+      <sub>Gerente de Projetos</sub><br />
+      <sub>📧 liliane.sales@igarassu.ifpe.edu.br</sub>
+    </td>
+    <td></td>
+  </tr>
+</table>
+
+---
+
+## 📞 Suporte
+
+Para questões, problemas ou sugestões:
+
+- Abra uma issue no repositório
+- Entre em contato com a equipe de desenvolvimento
+
+---
+
+## 🔄 Versionamento
+
+Este projeto segue o [Semantic Versioning](https://semver.org/).
+
+**Versão Atual**: 0.0.1 (Alpha)
+
+---
+
+## 🙏 Agradecimentos
+
+- Comunidade NestJS
+- Equipe do IFPE
+- Contribuidores do projeto
+
+---
+
+<p align="center">
+  Desenvolvido com ❤️ por estudantes e professores do IFPE
+</p>

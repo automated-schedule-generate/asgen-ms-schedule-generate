@@ -1,0 +1,15 @@
+{
+  "tasks": {
+    "start": "deno run --sloppy-imports -A --env-file=.env src/main.ts",
+    "check": "deno check --sloppy-imports src/main.ts",
+    "start:dev": "deno run --check --sloppy-imports -A --env-file=.env --watch src/main.ts",
+    "start:check": "deno check --sloppy-imports src/main.ts",
+    "start:prod": "deno run --sloppy-imports -A dist/main.js",
+    "build": "deno run --sloppy-imports -A npm:@nestjs/cli build",
+    "compile": "deno compile --sloppy-imports -A --env-file=.env --output=asgen-ms-schedule-generate src/main.ts"
+  },
+  "nodeModulesDir": "auto",
+  "imports": {
+    "src/": "./src/"
+  }
+}
