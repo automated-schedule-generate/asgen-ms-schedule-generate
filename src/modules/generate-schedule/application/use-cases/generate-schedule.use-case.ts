@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IUseCase } from 'src/common/interfaces/use-case.interface';
 import { IResponseSuccess } from 'src/common/interfaces/';
-import { CourseRepositoryImpl } from '../../infrastructure/repositories/course.repository.impl';
+import { CourseRepositoryImpl } from '../../infrastructure/repositories/';
 import { courseMapper } from '../../infrastructure/mappers';
 import { CourseEntity } from '../../domain/entities';
 import { GeneticService } from '../../domain/services';
