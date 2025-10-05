@@ -2,11 +2,13 @@ import { ClassTimeEnum } from '../enums';
 import { CourseEntity, SubjectEntity, TimetableEntity } from './';
 
 export class ScheduleEntity {
-  timetables: TimetableEntity[];
+  timetables: TimetableEntity[] = [];
   score: number = 0;
 
-  constructor(courses: CourseEntity[]) {
-    this.generateSchedule(courses);
+  constructor(courses: CourseEntity[] = []) {
+    if (courses.length > 0) {
+      this.generateSchedule(courses);
+    }
   }
 
   private generateSchedule(courses: CourseEntity[]): void {

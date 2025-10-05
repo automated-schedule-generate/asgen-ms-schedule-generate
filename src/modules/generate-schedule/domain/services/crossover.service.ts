@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IGenetic } from '../interfaces';
-import { ScheduleEntity } from '../entities';
+import { ScheduleEntity, TimetableEntity, SubjectEntity } from '../entities';
 
 @Injectable()
 export class CrossoverService implements IGenetic<ScheduleEntity[]> {
@@ -16,7 +16,47 @@ export class CrossoverService implements IGenetic<ScheduleEntity[]> {
   }
 
   private generateMescledTimetable(schedule1: ScheduleEntity, schedule2: ScheduleEntity): ScheduleEntity {
-    return schedule1; // TODO: implementar crossover
+    const childSchedule = new ScheduleEntity();
+
+    for (let i = 0; i < schedule1.timetables.length; i++) {
+      const parent1Timetable = schedule1.timetables[i];
+      const parent2Timetable = schedule2.timetables[i];
+
+      if (parent1Timetable.course.id === parent2Timetable.course.id) {
+        const childTimetable = this.crossoverTimetable(parent1Timetable, parent2Timetable);
+        childSchedule.timetables.push(childTimetable);
+      }
+    }
+
+    return childSchedule;
+  }
+  private crossoverTimetable(parent1: TimetableEntity, parent2: TimetableEntity): TimetableEntity {
+    const childSchedule: (SubjectEntity | null)[][][] = [];
+
+    for (let semesterIdx = 0; semesterIdx < parent1.schedule.length; semesterIdx++) {
+      const parent1Semester = parent1.schedule[semesterIdx];
+      const parent2Semester = parent2.schedule[semesterIdx];
+
+      const childSemester = this.crossoverSemester(parent1Semester, parent2Semester);
+      childSchedule.push(childSemester);
+    }
+
+    return new TimetableEntity(parent1.course, childSchedule);
+  }
+
+  private crossoverSemester(
+    parent1Semester: (SubjectEntity | null)[][],
+    parent2Semester: (SubjectEntity | null)[][],
+  ): (SubjectEntity | null)[][] {
+    let childSemester: (SubjectEntity | null)[][];
+
+    if (Math.random() < 0.5) {
+      childSemester = parent1Semester.map((element) => [...element]);
+    } else {
+      childSemester = parent2Semester.map((element) => [...element]);
+    }
+
+    return childSemester;
   }
 
   private getCombinations(array: ScheduleEntity[]): [ScheduleEntity, ScheduleEntity][] {
