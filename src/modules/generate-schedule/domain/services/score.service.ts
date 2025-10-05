@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ITimetable } from '../types';
-import { SubjectEntity, ScheduleEntity } from '../entities';
+import { SubjectEntity, ScheduleEntity, TimetableEntity } from '../entities';
 
 @Injectable()
 export class ScoreService {
@@ -21,7 +20,7 @@ export class ScoreService {
     return sum / schedule.timetables.length;
   }
 
-  private clustersElementPoints(timetable: ITimetable) {
+  private clustersElementPoints(timetable: TimetableEntity) {
     let sum = 0;
     for (const schedule of timetable.schedule) {
       const groupElements = this.groupElements(schedule);
@@ -68,19 +67,19 @@ export class ScoreService {
     return (1 - elementsIsolated / totalElements) * 1000;
   }
 
-  private teacherPreference(timetable: ITimetable) {
+  private teacherPreference(timetable: TimetableEntity) {
     return 1000;
   }
 
-  private subjectsConflits(timetable: ITimetable) {
+  private subjectsConflits(timetable: TimetableEntity) {
     return 1000;
   }
 
-  private teacherConflits(timetable: ITimetable) {
+  private teacherConflits(timetable: TimetableEntity) {
     return 1000;
   }
 
-  private roomConflits(timetable: ITimetable) {
+  private roomConflits(timetable: TimetableEntity) {
     return 1000;
   }
 }

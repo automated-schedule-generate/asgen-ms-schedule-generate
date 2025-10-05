@@ -1,5 +1,5 @@
 import { ClassroomEntity } from '../../domain/entities';
-import { IMapper } from '../../domain/types';
+import { IMapper } from '../../domain/interfaces';
 import { ClassroomModel } from '../models';
 
 export class ClassroomMapper implements IMapper<ClassroomEntity, ClassroomModel> {

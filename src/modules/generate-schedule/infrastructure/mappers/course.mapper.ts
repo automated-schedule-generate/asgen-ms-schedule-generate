@@ -1,11 +1,16 @@
 import { classMapper, classroomMapper, subjectMapper } from './';
 import { CourseEntity } from '../../domain/entities';
-import { IMapper } from '../../domain/types';
+import { IMapper } from '../../domain/interfaces';
 import { CourseModel } from '../models';
 
 export class CourseMapper implements IMapper<CourseEntity, CourseModel> {
   toEntity(courseModel: CourseModel): CourseEntity {
-    const courseEntity = new CourseEntity(courseModel.id, courseModel.name, courseModel.total_semesters);
+    const courseEntity = new CourseEntity(
+      courseModel.id,
+      courseModel.name,
+      courseModel.total_semesters,
+      courseModel.class_time,
+    );
     if (courseModel?.subjects) {
       courseEntity.subjects = courseModel.subjects.map((subjectModel) =>
         subjectMapper.toEntity(subjectModel.dataValues),

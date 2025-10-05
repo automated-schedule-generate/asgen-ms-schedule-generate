@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IGenetic } from '../types';
+import { IGenetic } from '../interfaces';
 import { ScheduleEntity } from '../entities';
 
 @Injectable()
@@ -15,7 +15,9 @@ export class CrossoverService implements IGenetic<ScheduleEntity[]> {
     return response;
   }
 
-  private generateMescledTimetable(schedule1: ScheduleEntity, schedule2: ScheduleEntity): ScheduleEntity {}
+  private generateMescledTimetable(schedule1: ScheduleEntity, schedule2: ScheduleEntity): ScheduleEntity {
+    return schedule1; // TODO: implementar crossover
+  }
 
   private getCombinations(array: ScheduleEntity[]): [ScheduleEntity, ScheduleEntity][] {
     const result: [ScheduleEntity, ScheduleEntity][] = [];

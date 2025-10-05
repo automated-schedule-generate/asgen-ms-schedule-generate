@@ -1,5 +1,6 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { ClassModel, ClassroomModel, SubjectModel } from './index';
+import { ClassTimeEnum } from '../../domain/enums/';
 
 @Table({
   tableName: 'courses',
@@ -22,6 +23,12 @@ export class CourseModel extends Model<CourseModel> {
     type: DataType.INTEGER,
   })
   public total_semesters: number;
+
+  @Column({
+    type: DataType.ENUM(...Object.values(ClassTimeEnum).map(String)),
+    defaultValue: ClassTimeEnum.MIN45,
+  })
+  public class_time: ClassTimeEnum;
 
   @HasMany(() => SubjectModel)
   public subjects?: SubjectModel[];

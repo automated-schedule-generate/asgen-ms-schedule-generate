@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CourseEntity, ScheduleEntity } from '../entities';
+import { CourseEntity, ScheduleEntity, GeneticConditionEntity } from '../entities';
 import { ScoreService, MutationService, CrossoverService, NaturalSelectionService } from './';
-import { GeneticCondition, IGenetic } from '../types';
-import { envData } from 'src/configuration/';
+import { IGenetic } from '../interfaces';
+import { envData } from 'src/configuration';
 
 @Injectable()
 export class GeneticService implements IGenetic<void> {
+  private courses: CourseEntity[] = [];
   private schedules: ScheduleEntity[] = [];
   public started: boolean = false;
 
   // quantidade maxima de execuções do algoritmo genetico
-  private condition: GeneticCondition = new GeneticCondition();
+  private condition: GeneticConditionEntity = new GeneticConditionEntity();
 
   constructor(
     private readonly scoreService: ScoreService,
@@ -20,25 +21,28 @@ export class GeneticService implements IGenetic<void> {
   ) {}
 
   public get public_courses(): CourseEntity[] {
-    return this.schedules.map((schedule) => schedule.courses).flat();
+    return this.courses;
   }
 
   execute(courses: CourseEntity[]): void {
-    this.started = true;
     if (this.condition.quantity === 0) {
-      this.firstGeneration(courses);
-    }
-
-    while (true) {
-      this.setScores();
-      if (this.stop) {
-        this.finish();
-        return;
+      this.courses = courses;
+      this.started = true;
+      if (this.condition.quantity === 0) {
+        this.firstGeneration(courses);
       }
 
-      this.nextGeneration();
+      while (true) {
+        this.setScores();
+        if (this.stop) {
+          this.finish();
+          return;
+        }
 
-      this.condition.nextQuantity();
+        this.nextGeneration();
+
+        this.condition.nextQuantity();
+      }
     }
   }
 
@@ -51,6 +55,7 @@ export class GeneticService implements IGenetic<void> {
   }
 
   private firstGeneration(courses: CourseEntity[]): void {
+    this.schedules = [];
     for (let i = 0; i < 10; i++) {
       this.schedules.push(new ScheduleEntity(courses));
     }

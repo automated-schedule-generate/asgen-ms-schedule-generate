@@ -8,6 +8,8 @@ import { PreferenceEntity } from './preference.entity';
 import { SubjectEntity } from './subject.entity';
 import { TimetableAllocationEntity } from './timetable-allocation.entity';
 import { ScheduleEntity } from './schedule.entity';
+import { GeneticConditionEntity } from './genetic-condition.entity';
+import { TimetableEntity } from './timetable.entity';
 
 export {
   ClassroomEntity,
@@ -20,4 +22,6 @@ export {
   SemesterEntity,
   AllocationTimeEntity,
   ScheduleEntity,
+  GeneticConditionEntity,
+  TimetableEntity,
 };

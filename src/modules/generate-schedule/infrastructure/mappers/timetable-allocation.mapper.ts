@@ -1,5 +1,5 @@
 import { TimetableAllocationEntity } from '../../domain/entities';
-import { IMapper } from '../../domain/types';
+import { IMapper } from '../../domain/interfaces';
 import { TimetableAllocationModel } from '../models';
 
 export class TimetableAllocationMapper implements IMapper<TimetableAllocationEntity, TimetableAllocationModel> {

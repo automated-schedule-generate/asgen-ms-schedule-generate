@@ -1,6 +1,6 @@
 import { envData } from 'src/configuration/';
 
-export class GeneticCondition {
+export class GeneticConditionEntity {
   #quantity: number = 0;
   #limitExecuted: number = Number(envData.limitExecuted ?? 0);
 

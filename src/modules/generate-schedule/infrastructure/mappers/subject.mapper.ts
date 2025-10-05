@@ -1,6 +1,6 @@
 import { teacherMapper } from './';
 import { SubjectEntity } from '../../domain/entities';
-import { IMapper } from '../../domain/types';
+import { IMapper } from '../../domain/interfaces';
 import { SubjectModel } from '../models';
 
 export class SubjectMapper implements IMapper<SubjectEntity, SubjectModel> {

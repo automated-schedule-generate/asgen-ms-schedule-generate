@@ -1,6 +1,6 @@
 import { preferenceMapper } from './';
 import { TeacherEntity } from '../../domain/entities';
-import { IMapper } from '../../domain/types';
+import { IMapper } from '../../domain/interfaces';
 import { TeacherModel } from '../models';
 
 export class TeacherMapper implements IMapper<TeacherEntity, TeacherModel> {
