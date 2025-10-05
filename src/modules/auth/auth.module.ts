@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthGuard } from './guards/auth.guard';
+import { AuthGuard } from './guards/';
 import { APP_GUARD } from '@nestjs/core';
 
 @Module({

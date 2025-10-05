@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GenerateScheduleController } from './infrastructure/controllers/generate-schedule.controller';
+import { GenerateScheduleController } from './infrastructure/controllers/';
 import {
   CrossoverService,
   MutationService,

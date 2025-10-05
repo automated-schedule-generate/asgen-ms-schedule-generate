@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
-import { CourseModel, SemesterModel } from './index';
+import { CourseModel, SemesterModel } from './';
 
 @Table({
   tableName: 'classes',
