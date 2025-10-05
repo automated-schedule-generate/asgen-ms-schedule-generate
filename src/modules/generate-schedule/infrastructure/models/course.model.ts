@@ -1,5 +1,5 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
-import { ClassModel, ClassroomModel, SubjectModel } from './index';
+import { ClassModel, ClassroomModel, SubjectModel } from './';
 import { ClassTimeEnum } from '../../domain/enums/';
 
 @Table({

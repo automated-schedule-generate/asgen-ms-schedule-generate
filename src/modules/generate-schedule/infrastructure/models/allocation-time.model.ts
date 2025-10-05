@@ -1,5 +1,5 @@
 import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
-import { TimetableAllocationModel } from './index';
+import { TimetableAllocationModel } from './';
 
 @Table({
   tableName: 'timetable_allocations',
