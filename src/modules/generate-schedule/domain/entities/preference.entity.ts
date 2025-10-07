@@ -1,14 +1,15 @@
+import { PreferenceDayEnum, PreferenceTurnEnum } from '../enums';
 import { TeacherEntity } from './';
 
 export class PreferenceEntity {
   id: number;
-  day: string;
-  turn: string;
+  day: PreferenceDayEnum;
+  turn: PreferenceTurnEnum;
   teacher_id: number;
 
   teacher?: TeacherEntity;
 
-  constructor(id: number, day: string, turn: string, teacher_id: number) {
+  constructor(id: number, day: PreferenceDayEnum, turn: PreferenceTurnEnum, teacher_id: number) {
     this.id = id;
     this.day = day;
     this.turn = turn;

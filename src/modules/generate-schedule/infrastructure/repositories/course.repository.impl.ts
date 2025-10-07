@@ -13,7 +13,7 @@ export class CourseRepositoryImpl {
     return this.course.findAll();
   }
 
-  async findAllWithSubjectsAndWithClasses(): Promise<CourseModel[]> {
+  async findAllWithDeps(): Promise<CourseModel[]> {
     return this.course.findAll({
       include: [
         {

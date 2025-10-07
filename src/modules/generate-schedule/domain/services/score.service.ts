@@ -10,7 +10,6 @@ export class ScoreService {
         this.clustersElementPoints(timetable),
         this.teacherPreference(timetable),
         this.teacherConflits(timetable),
-        this.subjectsConflits(timetable),
         this.roomConflits(timetable),
       ];
 
@@ -68,18 +67,31 @@ export class ScoreService {
   }
 
   private teacherPreference(timetable: TimetableEntity) {
-    return 1000;
-  }
+    if (timetable.teachers.length === 0) {
+      throw new Error('No teachers found in timetable');
+    }
 
-  private subjectsConflits(timetable: TimetableEntity) {
-    return 1000;
+    let sum = 0;
+
+    for (const teacher of timetable.teachers) {
+      if (teacher.preferences && teacher.preferences.length > 0) {
+        let count = 0;
+        for (const schedule of timetable.schedule) {
+          count += teacher.preferencesBySchedule(schedule);
+        }
+        sum += count / teacher.preferences.length;
+      }
+    }
+    return (sum / timetable.teachers.length) * 1000 || 0;
   }
 
   private teacherConflits(timetable: TimetableEntity) {
+    // TODO: Implement teacher conflict scoring
     return 1000;
   }
 
   private roomConflits(timetable: TimetableEntity) {
+    // TODO: Implement room conflict scoring
     return 1000;
   }
 }

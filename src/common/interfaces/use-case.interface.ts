@@ -1,3 +1,3 @@
 export interface IUseCase<type> {
-  execute(): Promise<type>;
+  execute(): Promise<type> | type;
 }

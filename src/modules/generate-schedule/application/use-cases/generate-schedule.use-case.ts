@@ -25,7 +25,7 @@ export class GenerateScheduleUseCase implements IUseCase<IResponseSuccess<Course
         })),
       };
     }
-    const courses = await this.courseRepository.findAllWithSubjectsAndWithClasses();
+    const courses = await this.courseRepository.findAllWithDeps();
     const data: CourseEntity[] = courses.map((course) => courseMapper.toEntity(course.dataValues)) ?? [];
 
     setTimeout(() => {

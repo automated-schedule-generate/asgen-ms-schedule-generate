@@ -1,5 +1,6 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
 import { TeacherModel } from './';
+import { PreferenceDayEnum, PreferenceTurnEnum } from '../../domain/enums/';
 
 @Table({
   tableName: 'preferences',
@@ -14,14 +15,14 @@ export class PreferenceModel extends Model<PreferenceModel> {
   declare public id: number;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.ENUM(...Object.values(PreferenceDayEnum).map(String)),
   })
-  public day: string;
+  public day: PreferenceDayEnum;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.ENUM(...Object.values(PreferenceTurnEnum)),
   })
-  public turn: string;
+  public turn: PreferenceTurnEnum;
 
   @ForeignKey(() => TeacherModel)
   @Column({

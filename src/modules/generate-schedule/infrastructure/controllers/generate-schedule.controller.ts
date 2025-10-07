@@ -18,7 +18,7 @@ export class GenerateScheduleController {
 
   @Public()
   @Get('best-current-schedule')
-  async get() {
-    return await this.getBestScheduleUseCase.execute();
+  get() {
+    return this.getBestScheduleUseCase.execute();
   }
 }
